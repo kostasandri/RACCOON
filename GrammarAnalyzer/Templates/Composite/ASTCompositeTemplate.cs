@@ -134,18 +134,6 @@ namespace $GrammarName$
     {
         get { return m_label; }
     }
-
-    /// <summary>
-    /// Returns the configuration for this type of node
-    /// </summary>
-    /// <value>
-    /// The m_ configuration.
-    /// </value>
-    public CNodeTypeConfiguration M_Configuration
-    {
-        get { return CConfigurationSettings.m_nodeTypeConfiguration[m_nodeType]; }
-    }
-
 }
 
 /// <summary>

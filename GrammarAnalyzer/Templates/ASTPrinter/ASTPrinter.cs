@@ -16,7 +16,7 @@ namespace GrammarAnalyzer.ASTVisitor.Visitors
 
         public ASTPrinter(string file)
         {
-            m_outputFile = Path.GetFileNameWithoutExtension(file) + "AST.dot";
+            m_outputFile = Path.GetFileNameWithoutExtension(file) + "_AST.dot";
             m_outputStream = new StreamWriter(m_outputFile);
         }
 
@@ -78,8 +78,7 @@ namespace GrammarAnalyzer.ASTVisitor.Visitors
                 Process process = new Process();
                 // Configure the process using the StartInfo properties.
                 process.StartInfo.FileName = "dot.exe";
-                process.StartInfo.Arguments = "-Tgif " + m_outputFile + " -o" +
-                                              Path.GetFileNameWithoutExtension(m_outputFile) + ".gif";
+                process.StartInfo.Arguments = "-Tgif " + m_outputFile + " -o" + Path.GetFileNameWithoutExtension(m_outputFile) + ".gif";
                 process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
                 process.Start();
                 process.WaitForExit(); // Waits here for the process to exit.

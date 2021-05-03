@@ -330,47 +330,57 @@ namespace GrammarAnalyzer
                 else if (line.Contains("$CFunctions$"))
                 {
                     int flag = 0;
+                    int counter = 0;
                     foreach (var key in m_nonTerminals_Contexts)
                     {
-                        String class_name = key.Key[3].ToString().ToUpper() + key.Key.Substring(4);
-                        newFile.WriteLine("\tpublic class C" + class_name + " : CASTComposite\n\t{");
-                        if (flag == 0)
+                        if (key_pos.Contains(counter))
                         {
-                            newFile.WriteLine("\t\tpublic C" + class_name + "() : base(NodeType." + key.Key.ToUpper() +
-                                              ", null, NodeType.NT_NA)\n\t\t{\n\t\t}");
-                            flag = 1;
-                        }
-                        else
-                        {
-                            newFile.WriteLine("\t\tpublic C" + class_name + "() : base(NodeType." + key.Key.ToUpper() +
-                                              ", parent, NodeType.NT_NA)\n\t\t{\n\t\t}");
-                        }
 
-                        newFile.WriteLine(
-                            "\n\t\tpublic override Return AcceptVisitor<Return>(CASTAbstractVisitor<Return> visitor)\n\t\t{");
-                        newFile.WriteLine(
-                            "\t\t\tIASTAbstractConcreteVisitor<Return> typedVisitor = visitor as IASTAbstractConcreteVisitor<Return>;");
-                        newFile.WriteLine("\t\t\tif (typedVisitor != null) return typedVisitor.Visit{0}(this);",
-                            class_name);
-                        newFile.WriteLine("\t\t\telse return visitor.VisitChildren(this);\n\t\t}\n");
-                        newFile.WriteLine(
-                            "\t\tpublic override CAbstractIterator<CASTElement> AcceptIterator(CASTAbstractConcreteIteratorFactory iteratorFactory)\n\t\t{");
-                        newFile.WriteLine(
-                            "\t\t\tIASTAbstractConcreteIteratorFactory typedFactory = iteratorFactory as IASTAbstractConcreteIteratorFactory;");
-                        newFile.WriteLine("\t\t\tif (typedFactory != null)\n\t\t\t{");
-                        newFile.WriteLine("\t\t\t\t return iteratorFactory.Create{0}Iterator(this);", class_name);
-                        newFile.WriteLine(
-                            "\t\t\t}\n\t\t\treturn iteratorFactory.CreateIteratorASTElementDescentantsFlatten(this);\n\t\t}");
-                        newFile.WriteLine(
-                            "\t\tpublic override CAbstractIterator<CASTElement> AcceptEventIterator(CASTAbstractConcreteIteratorFactory iteratorFactory, CASTGenericIteratorEvents events, object info = null)\n\t\t{");
-                        newFile.WriteLine(
-                            "\t\t\tIASTAbstractConcreteIteratorFactory typedFactory = iteratorFactory as IASTAbstractConcreteIteratorFactory;");
-                        newFile.WriteLine("\t\t\tif (typedFactory != null)\n\t\t\t{");
-                        newFile.WriteLine("\t\t\t\treturn iteratorFactory.Create{0}IteratorEvents(this, events, info);",
-                            class_name);
-                        newFile.WriteLine(
-                            "\t\t\t}\n\t\t\treturn iteratorFactory.CreateIteratorASTElementDescentantsFlattenEvents(this, events, info);\n\t\t}");
-                        newFile.WriteLine("\t}\n");
+                            Console.WriteLine("############### key: " + key.Key);
+                            Console.WriteLine(key_pos[0]);
+
+                            String class_name = key.Key[3].ToString().ToUpper() + key.Key.Substring(4);
+                            newFile.WriteLine("\tpublic class C" + class_name + " : CASTComposite\n\t{");
+                            if (flag == 0)
+                            {
+                                newFile.WriteLine("\t\tpublic C" + class_name + "() : base(NodeType." + key.Key.ToUpper() +
+                                                  ", null, NodeType.NT_NA)\n\t\t{\n\t\t}");
+                                flag = 1;
+                            }
+                            else
+                            {
+                                newFile.WriteLine("\t\tpublic C" + class_name + "(CASTComposite parent) : base(NodeType." + key.Key.ToUpper() +
+                                                  ", parent, NodeType.NT_NA)\n\t\t{\n\t\t}");
+                            }
+
+                            newFile.WriteLine(
+                                "\n\t\tpublic override Return AcceptVisitor<Return>(CASTAbstractVisitor<Return> visitor)\n\t\t{");
+                            newFile.WriteLine(
+                                "\t\t\tIASTAbstractConcreteVisitor<Return> typedVisitor = visitor as IASTAbstractConcreteVisitor<Return>;");
+                            newFile.WriteLine("\t\t\tif (typedVisitor != null) return typedVisitor.Visit{0}(this);",
+                                class_name);
+                            newFile.WriteLine("\t\t\telse return visitor.VisitChildren(this);\n\t\t}\n");
+                            newFile.WriteLine(
+                                "\t\tpublic override CAbstractIterator<CASTElement> AcceptIterator(CASTAbstractConcreteIteratorFactory iteratorFactory)\n\t\t{");
+                            newFile.WriteLine(
+                                "\t\t\tIASTAbstractConcreteIteratorFactory typedFactory = iteratorFactory as IASTAbstractConcreteIteratorFactory;");
+                            newFile.WriteLine("\t\t\tif (typedFactory != null)\n\t\t\t{");
+                            newFile.WriteLine("\t\t\t\t return iteratorFactory.Create{0}Iterator(this);", class_name);
+                            newFile.WriteLine(
+                                "\t\t\t}\n\t\t\treturn iteratorFactory.CreateIteratorASTElementDescentantsFlatten(this);\n\t\t}");
+                            newFile.WriteLine(
+                                "\t\tpublic override CAbstractIterator<CASTElement> AcceptEventIterator(CASTAbstractConcreteIteratorFactory iteratorFactory, CASTGenericIteratorEvents events, object info = null)\n\t\t{");
+                            newFile.WriteLine(
+                                "\t\t\tIASTAbstractConcreteIteratorFactory typedFactory = iteratorFactory as IASTAbstractConcreteIteratorFactory;");
+                            newFile.WriteLine("\t\t\tif (typedFactory != null)\n\t\t\t{");
+                            newFile.WriteLine("\t\t\t\treturn iteratorFactory.Create{0}IteratorEvents(this, events, info);",
+                                class_name);
+                            newFile.WriteLine(
+                                "\t\t\t}\n\t\t\treturn iteratorFactory.CreateIteratorASTElementDescentantsFlattenEvents(this, events, info);\n\t\t}");
+                            newFile.WriteLine("\t}\n");
+                            
+                        }
+                        counter++;
                     }
 
                     foreach (string terminal_node in leaf_nodes)
@@ -1192,7 +1202,7 @@ namespace GrammarAnalyzer
                                     newFile.WriteLine("\t\t\t\tProcess process = new Process();");
                                     newFile.WriteLine("\t\t\t\tprocess.StartInfo.FileName = \"dot.exe\";");
                                     newFile.WriteLine(
-                                        "\t\t\t\tprocess.StartInfo.Arguments = \" - Tgif \" + m_outputFile + \" - o\" + Path.GetFileNameWithoutExtension(m_outputFile) + \".gif\";");
+                                        "\t\t\t\tprocess.StartInfo.Arguments = \" -Tgif \" + m_outputFile + \" -o\" + Path.GetFileNameWithoutExtension(m_outputFile) + \".gif\";");
                                     newFile.WriteLine(
                                         "\t\t\t\tprocess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;");
                                     newFile.WriteLine("\t\t\t\tprocess.Start();");
