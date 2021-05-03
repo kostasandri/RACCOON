@@ -38,18 +38,19 @@ namespace GrammarAnalyzer
         public void Generate()
         {
             PathCreator();
-            GenerateAstComposite(); //done
-            GenerateAstGeneration(); //done
-            GenerateAstCompositeConcrete(); //done
-            GenerateConfiguration(); //done
-            GenerateAbstractConcreteIteratorFactory(); //done
-            GenerateAstConcreteVisitor(); //done
+            GenerateAstComposite();
+            GenerateAstGeneration();
+            GenerateAstCompositeConcrete();
+            GenerateConfiguration();
+            GenerateAbstractConcreteIteratorFactory();
+            GenerateAstConcreteVisitor();
             GenerateCAstAbstractIteratorEvents();
             GenerateAbstractGenericIteratorFactory();
             GenerateAbstractIterator();
             GenerateAbstractASTVistor();
             GenerateConcreteIterator();
             GenerateASTPrinter();
+            GenerateParser();
         }
 
         private void PathCreator()
@@ -63,7 +64,7 @@ namespace GrammarAnalyzer
                 "..\\..\\bin\\Debug\\Generated\\Configuration",
                 "..\\..\\bin\\Debug\\Generated\\Events",
                 "..\\..\\bin\\Debug\\Generated\\ASTGeneration",
-                "..\\..\\bin\\Debug\\Generated\\ASTPrinter\\"
+                "..\\..\\bin\\Debug\\Generated\\ASTPrinter\\",
             };
             try
             {
@@ -378,7 +379,7 @@ namespace GrammarAnalyzer
                             newFile.WriteLine(
                                 "\t\t\t}\n\t\t\treturn iteratorFactory.CreateIteratorASTElementDescentantsFlattenEvents(this, events, info);\n\t\t}");
                             newFile.WriteLine("\t}\n");
-                            
+
                         }
                         counter++;
                     }
@@ -1276,6 +1277,32 @@ namespace GrammarAnalyzer
             }
 
             gen.Close();
+            newFile.Close();
+        }
+
+        private void GenerateParser()
+        {
+            StreamWriter newFile = new StreamWriter("Generated\\Parse.cs");
+            newFile.WriteLine("using System;");
+            newFile.WriteLine("using System.IO;");
+            newFile.WriteLine("using Antlr4.Runtime;");
+            newFile.WriteLine("using Antlr4.Runtime.Tree;\n");
+            newFile.WriteLine("namespace " + m_grammarID + "\n{");
+            newFile.WriteLine("\tclass Parse\n\t{");
+            newFile.WriteLine("\t\tpublic static void parse(String file)\n\t\t{");
+            newFile.WriteLine("\t\t\tStreamReader reader = new StreamReader(file);");
+            newFile.WriteLine("\t\t\tAntlrInputStream iStream = new AntlrInputStream(reader);");
+            newFile.WriteLine("\t\t\t" + m_grammarID + "Lexer lexer = new " + m_grammarID + "Lexer(iStream);");
+            newFile.WriteLine("\t\t\tCommonTokenStream tokens = new CommonTokenStream(lexer);");
+            newFile.WriteLine("\t\t\t"+ m_grammarID + "Parser parser = new " + m_grammarID + "Parser(tokens);");
+            newFile.WriteLine("\t\t\tIParseTree tree = parser.compileUnit();\n");
+            newFile.WriteLine("\t\t\tASTGeneration astGeneration = new ASTGeneration();");
+            newFile.WriteLine("\t\t\tastGeneration.Visit(tree);\n");
+            newFile.WriteLine("\t\t\tASTPrinter astPrinter = new ASTPrinter(\"" + m_grammarID +"\");");
+            newFile.WriteLine("\t\t\tastPrinter.Visit(astGeneration.MRoot);");
+            newFile.WriteLine("\t\t}");
+            newFile.WriteLine("\t}");
+            newFile.WriteLine("}");
             newFile.Close();
         }
     }

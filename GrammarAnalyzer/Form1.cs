@@ -25,7 +25,9 @@ namespace GrammarAnalyzer
                     checkd_positions.Add(i);
                 }
             }
+            MessageBox.Show("At the new project place the above line of code at main.\n\n\t\tParse.parse(args[0]);");
             this.Close();
+            
         }
 
         private void Form1_Load(object sender, EventArgs e)

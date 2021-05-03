@@ -12,7 +12,7 @@ namespace $GrammarName$
 
         public ASTPrinter(string file)
         {
-            m_outputFile = Path.GetFileNameWithoutExtension(file) + "AST.dot";
+            m_outputFile = Path.GetFileNameWithoutExtension(file) + "_AST.dot";
             m_outputStream = new StreamWriter(m_outputFile);
         }
 
