@@ -79,8 +79,8 @@ ASSOCIATIVITY: '<' 'assoc=' ('left'|'right') '>';
 NONGREEDYCLOSURE : '.*?';
 
 TERMINAL: {!grammar_flag_TNT}? [A-Z][A-Za-z0-9_]* {int x=1;													
-													Console.WriteLine("###1: "+Text); 
-													Console.WriteLine("###1.1: " + (char) _input.La(x));
+													//Console.WriteLine("###1: "+Text); 
+													//Console.WriteLine("###1.1: " + (char) _input.La(x));
 												   while(_input.La(x)== ' ' || _input.La(x)== '\t' ){
                                                      x++;
                                                    }
@@ -89,8 +89,8 @@ TERMINAL: {!grammar_flag_TNT}? [A-Z][A-Za-z0-9_]* {int x=1;
 													Type = ID;}
 												   };
 NON_TERMINAL : {!grammar_flag_TNT}? [a-z][A-Za-z0-9_]*  { int x=1;														
-														Console.WriteLine("####2: " + Text); 
-														Console.WriteLine("####2.1: " + (char) _input.La(x)); 
+														//Console.WriteLine("####2: " + Text); 
+														//Console.WriteLine("####2.1: " + (char) _input.La(x)); 
 												         while(_input.La(x)== ' ' || _input.La(x)== '\t' ){
                                                            x++;
                                                          }
