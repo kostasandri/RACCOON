@@ -4,7 +4,6 @@ parser grammar EBNFParser;
 
 options { tokenVocab = EBNFLexer; }
 
-
 compileUnit: prologue+  ( grammar_rule | FRAGMENT? reg_exp )+;						// ok
 
 prologue :  gram_spec | action_content | toks | opts ;
@@ -63,7 +62,7 @@ grammar_rule_rhs_overide : grammar_rule_RHS? (HASH ID)?	;							// ok
 
 // Y : a c+= (~X)+ 
 
-grammar_rule_RHS : term* ;      // concatenation
+grammar_rule_RHS : term*;      // concatenation
 
 term :        factor ASTERISK		#closureAsterisk // closure
 			| factor PLUS			#closurePlus	 // closure
@@ -82,7 +81,7 @@ rule_action : LBRACE extern_code? RBRACE;
 
 extern_code : LBRACE extern_code RBRACE ;
 
-rhs_rule_terms : (ID (EQUAL|PLUSEQUAL))? (terminal|NON_TERMINAL)		// ok		// x OR X OR 'x' OR x=X OR x+='X'+   ??????????????????????????????????????????????				
+rhs_rule_terms : (ID (EQUAL|PLUSEQUAL))? (terminal|NON_TERMINAL)		// ok		// x OR X OR 'x' OR x=X OR x+='X'  				
 			   ;
 
 terminal : TERMINAL								//ok	//	from capital

@@ -40,7 +40,7 @@ LBRACE : '{'	{ nestinglevel++;
 				  }
 			    } ;
 RBRACE : '}'	{nestinglevel--;
-					if ( nestinglevel ==0 && externalCodeFlag ){
+					if ( nestinglevel == 0 && externalCodeFlag ){
 						externalCodeFlag = false;
 					    externCodeSwitch = false;
 						Mode(EBNFLexer.DefaultMode);
@@ -78,8 +78,9 @@ ASSOCIATIVITY: '<' 'assoc=' ('left'|'right') '>';
 
 NONGREEDYCLOSURE : '.*?';
 
-TERMINAL: [A-Z][A-Za-z0-9_]* {!grammar_flag_TNT}? {int x=1;													
-													//Console.WriteLine(Text); 
+TERMINAL: {!grammar_flag_TNT}? [A-Z][A-Za-z0-9_]* {int x=1;													
+													Console.WriteLine("###1: "+Text); 
+													Console.WriteLine("###1.1: " + (char) _input.La(x));
 												   while(_input.La(x)== ' ' || _input.La(x)== '\t' ){
                                                      x++;
                                                    }
@@ -87,15 +88,16 @@ TERMINAL: [A-Z][A-Za-z0-9_]* {!grammar_flag_TNT}? {int x=1;
 												   if ( _input.La(x) == '=' || (_input.La(x) == '+' && _input.La(x + 1) == '=')) { 
 													Type = ID;}
 												   };
-NON_TERMINAL : [a-z][A-Za-z0-9_]* {!grammar_flag_TNT}? { int x=1;														
-														//Console.WriteLine(Text); 
+NON_TERMINAL : {!grammar_flag_TNT}? [a-z][A-Za-z0-9_]*  { int x=1;														
+														Console.WriteLine("####2: " + Text); 
+														Console.WriteLine("####2.1: " + (char) _input.La(x)); 
 												         while(_input.La(x)== ' ' || _input.La(x)== '\t' ){
                                                            x++;
                                                          }
 												        if ( _input.La(x) == '=' || (_input.La(x) == '+' && _input.La(x + 1) == '=')) { 
 													       Type = ID;}
 												        };
-ID : [a-zA-Z_][A-Za-z0-9_]*  { grammar_flag_TNT = false;  };
+ID : [a-zA-Z_][A-Za-z0-9_]*  { grammar_flag_TNT = false; };
 NUMBER : [+-]?[0-9]+ ;
 AT : '@' ;
 BlockComment:   '/*' .*? '*/'-> skip ;
@@ -111,7 +113,7 @@ LBR : '{' { nestinglevel++;
 				Type=EBNFLexer.LBRACE; 
 		    } ; 
 RBR : '}' {nestinglevel--;
-					if ( nestinglevel ==0 && externalCodeFlag ){
+					if ( nestinglevel == 0 && externalCodeFlag ){
 						externalCodeFlag = false;
 					    externCodeSwitch = false;
 						Mode(EBNFLexer.DefaultMode);
